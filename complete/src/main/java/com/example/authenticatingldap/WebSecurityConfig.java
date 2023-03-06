@@ -9,17 +9,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.context.annotation.Bean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 @Configuration
 public class WebSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.authorizeRequests()
+				.authorizeRequests()
 				.anyRequest().fullyAuthenticated()
 				.and()
-			.formLogin();
+				// .formLogin();
+				.httpBasic();
 
 		return http.build();
 	}
@@ -27,29 +27,29 @@ public class WebSecurityConfig {
 	@Autowired
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth
-			.ldapAuthentication()
+				.ldapAuthentication()
 				.userDnPatterns("uid={0},ou=people")
 				.groupSearchBase("ou=groups")
 				.contextSource()
-					.url("ldap://localhost:8389/dc=springframework,dc=org")
-					.and()
+				.url("ldap://localhost:8389/dc=springframework,dc=org")
+				.and()
 				.passwordCompare()
-					.passwordEncoder(new BCryptPasswordEncoder())
-					.passwordAttribute("userPassword");
+				.passwordEncoder(new BCryptPasswordEncoder())
+				.passwordAttribute("userPassword");
 	}
 
 }
 
-//@Configuration
-//public class WebSecurityConfig {
+// @Configuration
+// public class WebSecurityConfig {
 
-//	@Bean
-//	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-//		return http
-//			.authorizeRequests()
-//			.anyRequest().authenticated()
-//			.and()
-//			.formLogin(Customizer.withDefaults())
-//			.build();
-//	}
-//}
+// @Bean
+// public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+// return http
+// .authorizeRequests()
+// .anyRequest().authenticated()
+// .and()
+// .formLogin(Customizer.withDefaults())
+// .build();
+// }
+// }
